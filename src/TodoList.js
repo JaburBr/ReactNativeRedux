@@ -1,7 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as TodoActions from './store/actions/todos';
 
 const styles = StyleSheet.create({
   container: {
@@ -9,20 +13,44 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  todoContainer:{
+    flexDirection: 'row'
+  },
 });
 
-const TodoList = ({ todos }) => {
+const TodoList = ({ todos, addTodo, removeTodo }) => {
   console.tron.log(todos);
   return (
     <View style={styles.container}>
-      {todos.map(item =>
-        <Text>{item}</Text>
-      )}
+      {todos.map(item => (
+        <View key={item.id} style={styles.todoContainer}>
+          <Text >{item.text}</Text>
+          <TouchableOpacity onPress={()=>{removeTodo(item.id)}}>
+            <Text>Excluir</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
+
+      <TouchableOpacity onPress={() => { addTodo('Listen slipknot') }}>
+        <Text>Adicionar Todo</Text>
+      </TouchableOpacity>
     </View>)
 };
+
+TodoList.propType = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
+    text: PropTypes.string,
+  })).isRequired,
+  addTodo: PropTypes.func.isRequired,
+}
 
 const mapStateToProps = state => ({
   todos: state.todos,
 });
 
-export default connect(mapStateToProps)(TodoList);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(TodoActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

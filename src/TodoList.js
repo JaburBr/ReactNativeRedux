@@ -14,19 +14,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  todoContainer:{
+  todoContainer: {
     flexDirection: 'row'
   },
 });
 
-const TodoList = ({ todos, addTodo, removeTodo }) => {
-  console.tron.log(todos);
-  return (
+const TodoList = ({ todos, addTodo, removeTodo }) =>
+  (
     <View style={styles.container}>
       {todos.map(item => (
         <View key={item.id} style={styles.todoContainer}>
           <Text >{item.text}</Text>
-          <TouchableOpacity onPress={()=>{removeTodo(item.id)}}>
+          <TouchableOpacity onPress={() => { removeTodo(item.id) }}>
             <Text>Excluir</Text>
           </TouchableOpacity>
         </View>
@@ -35,8 +34,9 @@ const TodoList = ({ todos, addTodo, removeTodo }) => {
       <TouchableOpacity onPress={() => { addTodo('Listen slipknot') }}>
         <Text>Adicionar Todo</Text>
       </TouchableOpacity>
-    </View>)
-};
+    </View>
+  );
+
 
 TodoList.propType = {
   todos: PropTypes.arrayOf(PropTypes.shape({
